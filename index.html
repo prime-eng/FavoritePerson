@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special for My Favorite Person ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;600&family=Sacramento&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #fdfaf5;
+            --accent-pink: #dcae96;
+            --soft-rose: #f4dcd6;
+            --sage: #b2ac88;
+            --text-main: #333;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-main);
+            overflow-x: hidden;
+            background-color: var(--bg-color);
+        }
+
+        /* --- VIDEO BACKGROUND --- */
+        .video-background {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        #bgVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(253, 250, 245, 0.6); /* Transparansi agar video terlihat tapi teks terbaca */
+            z-index: -1;
+        }
+
+        #petals-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .hero h1 {
+            font-family: 'Sacramento', cursive;
+            font-size: clamp(3rem, 10vw, 5rem);
+            color: var(--accent-pink);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .music-player {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px 20px;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Gallery Section */
+        .section-title {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: var(--accent-pink);
+            margin: 50px 0 30px;
+        }
+
+        .gallery {
+            padding: 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+        }
+
+        .polaroid {
+            background: white;
+            padding: 15px 15px 45px 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transform: rotate(-2deg);
+            transition: 0.5s ease;
+        }
+
+        .polaroid:nth-child(even) { transform: rotate(3deg); }
+        .polaroid:hover { transform: scale(1.05) rotate(0deg); z-index: 2; }
+
+        .polaroid img {
+            width: 100%; height: 300px; object-fit: cover;
+            border-radius: 2px;
+        }
+
+        .polaroid p {
+            font-family: 'Sacramento', cursive;
+            font-size: 2rem;
+            text-align: center;
+            margin-top: 20px;
+            color: var(--accent-pink);
+        }
+
+        /* Reasons Card */
+        .reasons-container {
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .reasons-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .reason-card {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            border-bottom: 4px solid var(--soft-rose);
+            width: 220px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            font-weight: 500;
+        }
+
+        /* Virtual Hug */
+        .virtual-hug {
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .hug-btn {
+            background: white;
+            border: 2px solid var(--accent-pink);
+            color: var(--accent-pink);
+            padding: 15px 40px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .hug-btn:hover { background: var(--accent-pink); color: white; transform: scale(1.1); }
+
+        /* Letter Section */
+        .letter-container {
+            padding: 100px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .letter-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(15px);
+            padding: clamp(30px, 5vw, 60px);
+            border-radius: 40px;
+            max-width: 750px;
+            border: 1px solid white;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .letter-card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            color: var(--accent-pink);
+        }
+
+        .letter-content {
+            font-size: 1.1rem;
+            line-height: 2;
+            margin-bottom: 40px;
+            text-align: justify;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            min-height: 100px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-yes { background-color: var(--sage); color: white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .btn-no { background-color: var(--accent-pink); color: white; z-index: 100; }
+
+        #hug-animation {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12rem;
+            display: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="video-background">
+        <video autoplay muted loop playsinline id="bgVideo">
+            <source src="video.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+
+    <div id="petals-container"></div>
+    <div id="hug-animation">💖</div>
+
+    <section class="hero">
+        <h1>Halo sayangku Nabillah Putri Adinda Fahra.,S.Pd...</h1>
+        <p>Scroll Buat kejutan kecil ini ✨</p>
+        
+        <div class="music-player">
+            <span>🎵 Lagu Buat Kamu:</span>
+            <audio controls>
+                <source src="ada.mp3" type="audio/mpeg">
+                Browser kamu tidak mendukung audio.
+            </audio>
+        </div>
+    </section>
+
+    <h2 class="section-title">Our Precious Memories</h2>
+    <div class="gallery">
+        <div class="polaroid">
+            <img src="images/foto2.jpeg" alt="Memory 1">
+            <p>Your beautiful smile</p>
+        </div>
+        <div class="polaroid">
+            <img src="images/foto1.jpeg" alt="Memory 2">
+            <p>Our favorite time</p>
+        </div>
+        <div class="polaroid">
+            <img src="images/foto3.jpeg" alt="Memory 3">
+            <p>I miss this...</p>
+        </div>
+    </div>
+
+    <section class="reasons-container">
+        <h2 class="section-title">Kenapa Kamu Spesial?</h2>
+        <div class="reasons-grid">
+            <div class="reason-card">✨ Sabar ngadepin aku aku</div>
+            <div class="reason-card">🌸 Senyum kamu yang paling cantik</div>
+            <div class="reason-card">🍪 Selalu bikin aku tenang</div>
+            <div class="reason-card">🍯 Suaramu favorit aku</div>
+        </div>
+    </section>
+
+    <section class="virtual-hug">
+        <p style="margin-bottom: 20px; font-weight: 300;">Kalo kamu masih kesel, klik ini dulu ya sayang:</p>
+        <button class="hug-btn" onclick="giveHug()">Send Virtual Hug 🤗</button>
+    </section>
+
+    <section class="letter-container">
+        <div class="letter-card">
+            <h2>I'm Truly Sorry</h2>
+            <div class="letter-content">
+                <p>Aku benci fakta bahwa aku udah ngerusak hari kamu kemarin sayang, aku sangat gamau kalo hal ini keulang lagi di kemudian hari. Aku gamau bikin kamu cape lagi, akupun juga cape kalo harus berantem setiap hari sayang, aku minta maaf cantik. Maaf kalo effort ku ga seberapa buat kamu, maaf juga kalo aku baru bisa ngasih hal kecil kaya gini buat kamu sayang.</p>
+                <p>Maafin aku yaa sayang? ❤️</p>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-yes" onclick="accepted()">Iya, sayang aku maafin! ❤️</button>
+                <button class="btn btn-no" id="noBtn" onmouseover="escape()">Taknakk!</button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Load Sound Terompet
+        const trumpetSound = new Audio('trumpet.mp3');
+
+        // Animasi Bunga Jatuh
+        function createPetal() {
+            const container = document.getElementById('petals-container');
+            const petal = document.createElement('div');
+            const icons = ['🌸', '✨', '🤍', '🌷'];
+            petal.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+            petal.style.position = 'absolute';
+            petal.style.left = Math.random() * 100 + 'vw';
+            petal.style.top = '-20px';
+            petal.style.zIndex = "0";
+            petal.style.transition = 'transform 6s linear, top 6s linear';
+            container.appendChild(petal);
+            setTimeout(() => {
+                petal.style.top = '100vh';
+                petal.style.transform = `rotate(${Math.random() * 360}deg)`;
+            }, 100);
+            setTimeout(() => petal.remove(), 7000);
+        }
+        setInterval(createPetal, 400);
+
+        // Virtual Hug Function
+        function giveHug() {
+            const hug = document.getElementById('hug-animation');
+            
+            // Suara terompet
+            trumpetSound.play().catch(e => console.log("Audio play failed"));
+
+            // Animasi Hati
+            hug.style.display = 'block';
+            
+            // Confetti Warna Warni Party
+            confetti({ 
+                particleCount: 150, 
+                spread: 70, 
+                origin: { y: 0.6 },
+                colors: ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff']
+            });
+
+            setTimeout(() => { hug.style.display = 'none'; }, 2000);
+        }
+
+        // Tombol kabur
+        function escape() {
+            const btn = document.getElementById('noBtn');
+            const x = Math.random() * (window.innerWidth - btn.clientWidth - 50);
+            const y = Math.random() * (window.innerHeight - btn.clientHeight - 50);
+            btn.style.position = 'fixed';
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+        }
+
+        function accepted() {
+            confetti({ 
+                particleCount: 250, 
+                spread: 100, 
+                origin: { y: 0.6 },
+                colors: ['#dcae96', '#f4dcd6', '#ffffff'] 
+            });
+            setTimeout(() => {
+                alert("Yeay! Makasih udah maafin aku yaa sayang. I will try to be better for you! 🥰❤️");
+            }, 500);
+        }
+    </script>
+</body>
+</html>
